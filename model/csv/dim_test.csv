@@ -1,0 +1,24 @@
+test_key,title,title_path,file,suite,test_type,tags,is_smoke,is_demo,first_seen,last_seen
+0968897d7972,orders products by name from Z to A,Product sorting > orders products by name from Z to A,ui/sorting.spec.ts,Product sorting,ui,"regression,ui",false,false,2026-10-20,2026-10-24
+0d3b8743f242,rejects unknown credentials,Login > rejects unknown credentials,ui/login.spec.ts,Login,ui,"regression,ui",false,false,2026-10-20,2026-10-24
+2d6b21e0855d,refuses to delete a booking without a token,Booking contract > refuses to delete a booking without a token,api/booking-contract.spec.ts,Booking contract,api,"api,regression",false,false,2026-10-20,2026-10-24
+3aad2dd90ca4,rejects an empty booking payload,Booking contract > rejects an empty booking payload,api/booking-contract.spec.ts,Booking contract,api,"api,regression",false,false,2026-10-20,2026-10-24
+3bdf9c035a06,checkout overview,Visual > checkout overview,visual/pages.spec.ts,Visual,visual,"regression,visual",false,false,2026-10-20,2026-10-24
+4369c5b16c54,returns not found for an unknown booking,Booking contract > returns not found for an unknown booking,api/booking-contract.spec.ts,Booking contract,api,"api,regression",false,false,2026-10-20,2026-10-24
+457d3bfa362f,login page,Visual > login page,visual/pages.spec.ts,Visual,visual,"regression,visual",false,false,2026-10-20,2026-10-24
+4c35b64182b6,purchases two products and shows the taxed total,Checkout > purchases two products and shows the taxed total,ui/checkout.spec.ts,Checkout,ui,"smoke,ui",true,false,2026-10-20,2026-10-24
+5c9df01e81ac,adds two products and removes one,Cart > adds two products and removes one,ui/cart.spec.ts,Cart,ui,"smoke,ui",true,false,2026-10-20,2026-10-24
+6140f15a1397,orders products by price from low to high,Product sorting > orders products by price from low to high,ui/sorting.spec.ts,Product sorting,ui,"regression,ui",false,false,2026-10-20,2026-10-24
+6e2d4abf5919,requires a username,Login > requires a username,ui/login.spec.ts,Login,ui,"regression,ui",false,false,2026-10-20,2026-10-24
+795241cdf040,requires a first name before continuing,Checkout > requires a first name before continuing,ui/checkout.spec.ts,Checkout,ui,"regression,ui",false,false,2026-10-20,2026-10-24
+7ad7817b00cb,recovers on retry after a simulated first-attempt failure,Demo > recovers on retry after a simulated first-attempt failure,demo/demo-flaky.spec.ts,Demo,demo,demo-flaky,false,true,2026-10-20,2026-10-24
+8169e73c1dd7,lists booking ids,Booking contract > lists booking ids,api/booking-contract.spec.ts,Booking contract,api,"api,regression",false,false,2026-10-20,2026-10-24
+a86940d37681,answers the health check,Booking contract > answers the health check,api/booking-contract.spec.ts,Booking contract,api,"api,smoke",true,false,2026-10-20,2026-10-24
+b0d2e6d8b3d4,signs in a standard shopper and opens the inventory,Login > signs in a standard shopper and opens the inventory,ui/login.spec.ts,Login,ui,"smoke,ui",true,false,2026-10-20,2026-10-24
+c405464e82b5,blocks a locked account,Login > blocks a locked account,ui/login.spec.ts,Login,ui,"regression,ui",false,false,2026-10-20,2026-10-24
+c9ee9c08c979,refuses to replace a booking without a token,Booking contract > refuses to replace a booking without a token,api/booking-contract.spec.ts,Booking contract,api,"api,regression",false,false,2026-10-20,2026-10-24
+d824572bbf90,issues a token for valid credentials,Auth token > issues a token for valid credentials,api/auth.spec.ts,Auth token,api,"api,smoke",true,false,2026-10-20,2026-10-24
+dfa2c9379a0e,cart with two products,Visual > cart with two products,visual/pages.spec.ts,Visual,visual,"regression,visual",false,false,2026-10-20,2026-10-24
+e25e858427cc,returns the published failure contract for bad credentials,Auth token > returns the published failure contract for bad credentials,api/auth.spec.ts,Auth token,api,"api,regression",false,false,2026-10-20,2026-10-24
+f5361a032915,inventory page,Visual > inventory page,visual/pages.spec.ts,Visual,visual,"regression,visual",false,false,2026-10-20,2026-10-24
+fccdec3228f9,"creates, reads, updates, patches, and deletes a booking","Booking CRUD > creates, reads, updates, patches, and deletes a booking",api/booking-crud.spec.ts,Booking CRUD,api,"api,smoke",true,false,2026-10-20,2026-10-24

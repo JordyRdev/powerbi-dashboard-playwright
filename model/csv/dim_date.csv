@@ -1,0 +1,6 @@
+date_key,date,year,month,month_name,year_month,iso_year_week,weekday,weekday_name,is_weekend
+20261020,2026-10-20,2026,10,October,2026-10,202643,2,Tuesday,false
+20261021,2026-10-21,2026,10,October,2026-10,202643,3,Wednesday,false
+20261022,2026-10-22,2026,10,October,2026-10,202643,4,Thursday,false
+20261023,2026-10-23,2026,10,October,2026-10,202643,5,Friday,false
+20261024,2026-10-24,2026,10,October,2026-10,202643,6,Saturday,true

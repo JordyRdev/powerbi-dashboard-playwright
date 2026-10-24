@@ -1,0 +1,2 @@
+environment_key,container_image,playwright_version,os
+eb986b7a7ab7,mcr.microsoft.com/playwright:v1.64.1-noble,1.64.1,Ubuntu 24.04
