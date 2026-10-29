@@ -8,6 +8,9 @@ A Playwright + TypeScript suite that runs in parallel on GitHub Actions, stores 
 
 > **Status:** phase 3 of 6 (data pipeline) is done. Every CI run on `main` is added to a star schema of Parquet files on the [`data` branch](https://github.com/JordyRdev/powerbi-dashboard-playwright/tree/data), checked for data quality on the way. The Power BI dashboard comes next. See the [roadmap](#roadmap).
 
+<img width="926" height="837" alt="Allure report: pass rate, duration trends and flaky tests across CI runs" src="https://github.com/user-attachments/assets/fe17f7a3-f6f3-4167-9fc4-12ef0fccfbee" />
+The live report: https://jordyrdev.github.io/powerbi-dashboard-playwright/
+
 ## Why this project
 
 Teams run thousands of tests, but few can answer three simple questions:
