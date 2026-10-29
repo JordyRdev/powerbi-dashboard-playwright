@@ -1,12 +1,12 @@
 # Power BI Dashboard for Playwright
 
-[![CI](https://github.com/JordyR1986/powerbi-dashboard-playwright/actions/workflows/ci.yml/badge.svg)](https://github.com/JordyR1986/powerbi-dashboard-playwright/actions/workflows/ci.yml)
-[![Allure report](https://img.shields.io/badge/report-Allure-orange.svg)](https://jordyr1986.github.io/powerbi-dashboard-playwright/)
+[![CI](https://github.com/JordyRdev/powerbi-dashboard-playwright/actions/workflows/ci.yml/badge.svg)](https://github.com/JordyRdev/powerbi-dashboard-playwright/actions/workflows/ci.yml)
+[![Allure report](https://img.shields.io/badge/report-Allure-orange.svg)](https://JordyRdev.github.io/powerbi-dashboard-playwright/)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
 A Playwright + TypeScript suite that runs in parallel on GitHub Actions, stores every run in a star schema, and turns it into a Power BI dashboard: flaky tests, duration trends, pass rate per release and failure patterns.
 
-> **Status:** phase 3 of 6 (data pipeline) is done. Every CI run on `main` is added to a star schema of Parquet files on the [`data` branch](https://github.com/JordyR1986/powerbi-dashboard-playwright/tree/data), checked for data quality on the way. The Power BI dashboard comes next. See the [roadmap](#roadmap).
+> **Status:** phase 3 of 6 (data pipeline) is done. Every CI run on `main` is added to a star schema of Parquet files on the [`data` branch](https://github.com/JordyRdev/powerbi-dashboard-playwright/tree/data), checked for data quality on the way. The Power BI dashboard comes next. See the [roadmap](#roadmap).
 
 ## Why this project
 
@@ -18,7 +18,7 @@ Teams run thousands of tests, but few can answer three simple questions:
 
 This repository answers them with real data. A Playwright suite runs in CI against public demo apps. Every run is loaded into a small star schema, and Power BI turns that into a quality dashboard. It brings test automation and business intelligence together in one project.
 
-The test suite started in [playwright-typescript-portfolio](https://github.com/JordyR1986/playwright-typescript-portfolio) and continues here.
+The test suite started in [playwright-typescript-portfolio](https://github.com/JordyRdev/playwright-typescript-portfolio) and continues here.
 
 ## Architecture
 
@@ -118,8 +118,8 @@ The image uses the same Playwright version as `package.json`, so browsers and fo
 
 ## Reports and CI
 
-- **Allure report:** <https://jordyr1986.github.io/powerbi-dashboard-playwright/> with trends across runs and failure categories (visual, network, locator, timeout, assertion).
-- **Playwright HTML report:** <https://jordyr1986.github.io/powerbi-dashboard-playwright/playwright/>
+- **Allure report:** <https://JordyRdev.github.io/powerbi-dashboard-playwright/> with trends across runs and failure categories (visual, network, locator, timeout, assertion).
+- **Playwright HTML report:** <https://JordyRdev.github.io/powerbi-dashboard-playwright/playwright/>
 - **Raw results:** every CI run keeps a `raw-results` artifact for 90 days with `playwright-results.json`, `junit.xml` and `run-meta.json`.
 - **Dataset:** the `data` branch holds every run on `main` and the star schema built from it, as Parquet and CSV. See [docs/data-model.md](docs/data-model.md).
 
@@ -165,7 +165,7 @@ Details, ER diagram and metric definitions: [docs/data-model.md](docs/data-model
 
 ## Author
 
-[@JordyR1986](https://github.com/JordyR1986): QA and data quality, test automation and business intelligence.
+[@JordyRdev](https://github.com/JordyRdev): QA and data quality, test automation and business intelligence.
 
 ## License
 
