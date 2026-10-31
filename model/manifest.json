@@ -1,0 +1,95 @@
+{
+  "built_at": "2026-10-31T20:33:59.604Z",
+  "runs": 35,
+  "first_run_at": "2026-10-20 17:11:39.368+00",
+  "last_run_at": "2026-10-31 20:31:29.114+00",
+  "tables": {
+    "fact_test_result": 1750,
+    "fact_run": 35,
+    "dim_test": 23,
+    "dim_project": 7,
+    "dim_environment": 1,
+    "dim_release": 1,
+    "dim_commit": 5,
+    "dim_date": 12,
+    "dim_failure_category": 6
+  },
+  "checks": [
+    {
+      "check": "fact_test_result grain is unique",
+      "violations": 0
+    },
+    {
+      "check": "fact_run has one row per run",
+      "violations": 0
+    },
+    {
+      "check": "every run has at least one result",
+      "violations": 0
+    },
+    {
+      "check": "durations are not negative",
+      "violations": 0
+    },
+    {
+      "check": "status is a known value",
+      "violations": 0
+    },
+    {
+      "check": "is_flaky matches status",
+      "violations": 0
+    },
+    {
+      "check": "failed and flaky results have a failure category",
+      "violations": 0
+    },
+    {
+      "check": "run totals add up",
+      "violations": 0
+    },
+    {
+      "check": "run totals match the Playwright summary",
+      "violations": 0
+    },
+    {
+      "check": "JUnit testcase count matches results",
+      "violations": 0
+    },
+    {
+      "check": "no orphan test keys",
+      "violations": 0
+    },
+    {
+      "check": "no orphan project keys",
+      "violations": 0
+    },
+    {
+      "check": "no orphan environment keys",
+      "violations": 0
+    },
+    {
+      "check": "no orphan release keys",
+      "violations": 0
+    },
+    {
+      "check": "no orphan commit keys",
+      "violations": 0
+    },
+    {
+      "check": "no orphan date keys",
+      "violations": 0
+    },
+    {
+      "check": "no orphan failure keys",
+      "violations": 0
+    },
+    {
+      "check": "no orphan run keys",
+      "violations": 0
+    },
+    {
+      "check": "dimension keys are unique",
+      "violations": 0
+    }
+  ]
+}
