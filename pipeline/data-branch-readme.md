@@ -16,8 +16,8 @@ in `docs/data-model.md` there.
 The branch always has a single commit: each CI run rebuilds the model from all raw
 runs and replaces the snapshot.
 
-Power BI reads the Parquet files with the Web connector, for example:
+Power BI reads the CSV files with the Web connector. Parquet copies of the same tables sit beside them. For example:
 
 ```text
-https://raw.githubusercontent.com/JordyR1986/powerbi-dashboard-playwright/data/model/fact_test_result.parquet
+https://raw.githubusercontent.com/JordyRdev/powerbi-dashboard-playwright/data/model/csv/fact_test_result.csv
 ```

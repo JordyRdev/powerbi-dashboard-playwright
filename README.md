@@ -6,7 +6,7 @@
 
 A Playwright + TypeScript suite that runs in parallel on GitHub Actions, stores every run in a star schema, and turns it into a Power BI dashboard: flaky tests, duration trends, pass rate per release and failure patterns.
 
-> **Status:** phase 3 of 6 (data pipeline) is done. Every CI run on `main` is added to a star schema of Parquet files on the [`data` branch](https://github.com/JordyRdev/powerbi-dashboard-playwright/tree/data), checked for data quality on the way. The Power BI dashboard comes next. See the [roadmap](#roadmap).
+> **Status:** phase 4 of 6 (Power BI) is in the repo. Every CI run on `main` is added to a star schema on the [`data` branch](https://github.com/JordyRdev/powerbi-dashboard-playwright/tree/data), and `powerbi/Quality.pbip` turns that into pass rate, flaky tests, duration and release pages. Refresh it in Power BI Desktop to confirm the numbers. Screenshots are phase 5. See the [roadmap](#roadmap).
 
 <img width="926" height="837" alt="Allure report: pass rate, duration trends and flaky tests across CI runs" src="https://github.com/user-attachments/assets/fe17f7a3-f6f3-4167-9fc4-12ef0fccfbee" />
 The live report: https://jordyrdev.github.io/powerbi-dashboard-playwright/
@@ -68,6 +68,7 @@ More detail and the design decisions are in [docs/architecture.md](docs/architec
 | CI        | Lint, 4 sharded test jobs in the Playwright image, merged reports, Pages, cron |
 | Reports   | Allure and Playwright HTML on GitHub Pages; JSON + JUnit kept as artifacts     |
 | Data      | DuckDB SQL builds a star schema with quality checks; Parquet + CSV on `data`   |
+| Power BI  | PBIP project: Power Query, a TMDL star schema, DAX measures, five report pages |
 
 ```text
 tests/ui            login, sorting, cart, checkout
@@ -75,13 +76,14 @@ tests/api           auth, booking CRUD, contract checks
 tests/visual        screenshot comparison (baselines in __screenshots__)
 tests/demo          the labelled demo flaky test
 pipeline/           ingest, load (Zod), DuckDB build and SQL (staging, dims, facts, checks)
+powerbi/            Quality.pbip: semantic model (TMDL) and report pages
 scripts/            publish-data.sh: updates the data branch
 src/pages           page objects
 src/fixtures        shopper and API fixtures
 src/api             HTTP client and Zod schemas
 src/data            users, catalog, customer, booking builder
 src/support         checkout total rule
-docs/               architecture, CI pipeline, visual testing, data model
+docs/               architecture, CI pipeline, visual testing, data model, Power BI
 Dockerfile          test image on mcr.microsoft.com/playwright
 merge.config.ts     merges shard reports into HTML, JSON and JUnit
 allurerc.mjs        Allure 3 report, history and failure categories
@@ -146,6 +148,16 @@ raw-results → raw/<run_id>/ → staging (TypeScript + Zod) → DuckDB SQL → 
 
 Details, ER diagram and metric definitions: [docs/data-model.md](docs/data-model.md).
 
+## Power BI
+
+`powerbi/Quality.pbip` is a Power BI project you open in Power BI Desktop. Power Query loads the nine tables from the public CSV files on the `data` branch. A parameter switches that to a local folder of the same files when you want to work offline.
+
+The semantic model is the star schema: both facts share the dimensions, keys are hidden, and `dim_date` is marked as the date table. Measures follow the definitions in [docs/data-model.md](docs/data-model.md), including pass rate, fail rate, flaky rate, flaky test count, average and p90 duration, and the change against the previous period and the previous release.
+
+The report has five pages: overview, flaky tests, duration trends, release comparison and failure patterns. The same date, project, release, demo and test type slicers are on every page.
+
+How to open it, refresh it, and which numbers to expect on the current snapshot: [docs/power-bi.md](docs/power-bi.md).
+
 ## Roadmap
 
 | Phase              | Scope                                                                                                              | Status   |
@@ -153,7 +165,7 @@ Details, ER diagram and metric definitions: [docs/data-model.md](docs/data-model
 | 1. Setup           | New repo, suite carried over, Docker, lint and format, first green CI                                              | Done     |
 | 2. Test suite + CI | Visual tests in Docker, `@smoke`/`@regression` tags, sharded matrix, merged reports, Allure on Pages, cron, `v1.0` | Done     |
 | 3. Data pipeline   | JSON reporter, loader, DuckDB SQL to a star schema, data quality checks, Parquet on a `data` branch                | Done     |
-| 4. Power BI        | Power Query (M), semantic model and relationships, DAX measures, report pages, saved as PBIP/TMDL in Git           | Next     |
+| 4. Power BI        | Power Query (M), semantic model and relationships, DAX measures, report pages, saved as PBIP/TMDL in Git           | Done     |
 | 5. Presentation    | Dashboard screenshots, short demo video, case study                                                                | Planned  |
 | 6. Optional        | JMeter load test on Restful Booker, failure clustering in SQL, Microsoft Fabric Lakehouse variant                  | Optional |
 
