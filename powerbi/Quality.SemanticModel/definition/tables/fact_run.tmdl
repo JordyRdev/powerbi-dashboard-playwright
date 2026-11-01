@@ -1,0 +1,189 @@
+/// One CI run. The latest attempt if the run was re-run.
+table fact_run
+	lineageTag: 1322e180-d8dc-4b9c-8486-98248fc0e084
+
+	/// GitHub Actions run id.
+	column run_key
+		dataType: int64
+		isHidden
+		isKey
+		formatString: 0
+		displayFolder: Keys
+		lineageTag: bef4a7de-6e7d-44e1-9aab-d9422b4402ac
+		summarizeBy: none
+		sourceColumn: run_key
+
+	column release_key
+		dataType: string
+		isHidden
+		displayFolder: Keys
+		lineageTag: 2b14f820-0f98-4708-b149-8ecc7332b273
+		summarizeBy: none
+		sourceColumn: release_key
+
+	column commit_key
+		dataType: string
+		isHidden
+		displayFolder: Keys
+		lineageTag: 087f8af3-4c11-4605-a10e-9cd53056a8c7
+		summarizeBy: none
+		sourceColumn: commit_key
+
+	column environment_key
+		dataType: string
+		isHidden
+		displayFolder: Keys
+		lineageTag: 8fd75b2c-c36e-46d8-a6c3-045fba5b77c7
+		summarizeBy: none
+		sourceColumn: environment_key
+
+	column date_key
+		dataType: int64
+		isHidden
+		formatString: 0
+		displayFolder: Keys
+		lineageTag: 753de5cf-21c2-4f38-9047-0d511ae4cb0c
+		summarizeBy: none
+		sourceColumn: date_key
+
+	/// push, schedule, manual or pr.
+	column Trigger
+		dataType: string
+		displayFolder: Run
+		lineageTag: c2e88ed8-05ce-4aec-ac2f-bf34036500c4
+		summarizeBy: none
+		sourceColumn: trigger
+
+	column 'Git ref'
+		dataType: string
+		displayFolder: Run
+		lineageTag: 89de7623-4dcc-47fb-9fcd-3ab3a2e0affd
+		summarizeBy: none
+		sourceColumn: ref
+
+	column Attempt
+		dataType: int64
+		formatString: 0
+		displayFolder: Run
+		lineageTag: c87755d7-0276-4c83-9daa-a063a610d138
+		summarizeBy: none
+		sourceColumn: run_attempt
+
+	column Shards
+		dataType: int64
+		formatString: 0
+		displayFolder: Run
+		lineageTag: 52cc1887-e7c8-4197-94ce-f46be6e71649
+		summarizeBy: none
+		sourceColumn: shard_count
+
+	column 'Started at'
+		dataType: dateTime
+		formatString: dd/MM/yyyy HH:mm:ss
+		displayFolder: Run
+		lineageTag: 97d6f5a3-26cc-4cef-9cf8-4d7e24a58a99
+		summarizeBy: none
+		sourceColumn: started_at
+
+	/// Wall clock of the test job, in milliseconds.
+	column 'Wall clock (ms)'
+		dataType: int64
+		formatString: #,0
+		displayFolder: Run
+		lineageTag: 43e1d6c4-4286-4cb1-9865-de0ac9888f54
+		summarizeBy: none
+		sourceColumn: wall_clock_ms
+
+	column 'Workflow result'
+		dataType: string
+		displayFolder: Run
+		lineageTag: f73071ca-97a6-4e7d-a210-153547205bca
+		summarizeBy: none
+		sourceColumn: workflow_result
+
+	column 'Run URL'
+		dataType: string
+		displayFolder: Run
+		lineageTag: 613c5023-982c-4f1d-aee4-29e18063011d
+		dataCategory: WebUrl
+		summarizeBy: none
+		sourceColumn: run_url
+
+	/// Result count stored on the run. Prefer the measures when you slice by test or project.
+	column 'Stored results'
+		dataType: int64
+		formatString: #,0
+		displayFolder: Stored totals
+		lineageTag: 277bbc4d-eb30-4e83-8b51-316f36f77ecc
+		summarizeBy: none
+		sourceColumn: tests
+
+	column 'Stored passed'
+		dataType: int64
+		formatString: #,0
+		displayFolder: Stored totals
+		lineageTag: 3894098c-e245-463b-b32b-73adef7a6a11
+		summarizeBy: none
+		sourceColumn: passed
+
+	column 'Stored failed'
+		dataType: int64
+		formatString: #,0
+		displayFolder: Stored totals
+		lineageTag: adf90f60-524a-4826-95a9-aee15b660ecd
+		summarizeBy: none
+		sourceColumn: failed
+
+	column 'Stored flaky'
+		dataType: int64
+		formatString: #,0
+		displayFolder: Stored totals
+		lineageTag: 18475e34-5da3-4582-95f5-dde14ace24e2
+		summarizeBy: none
+		sourceColumn: flaky
+
+	column 'Stored skipped'
+		dataType: int64
+		formatString: #,0
+		displayFolder: Stored totals
+		lineageTag: 890f6563-01ee-40ae-acd3-31a2baad462f
+		summarizeBy: none
+		sourceColumn: skipped
+
+	partition fact_run = m
+		mode: import
+		source =
+				let
+				    Source = fnLoadCsv("fact_run.csv"),
+				    Typed = Table.TransformColumnTypes(
+				        Source,
+				        {
+				            {"run_key", Int64.Type},
+				            {"release_key", type text},
+				            {"commit_key", type text},
+				            {"environment_key", type text},
+				            {"date_key", Int64.Type},
+				            {"trigger", type text},
+				            {"ref", type text},
+				            {"run_attempt", Int64.Type},
+				            {"shard_count", Int64.Type},
+				            {"started_at", type text},
+				            {"wall_clock_ms", Int64.Type},
+				            {"workflow_result", type text},
+				            {"run_url", type text},
+				            {"tests", Int64.Type},
+				            {"passed", Int64.Type},
+				            {"failed", Int64.Type},
+				            {"flaky", Int64.Type},
+				            {"skipped", Int64.Type}
+				        }
+				    ),
+				    Parsed = Table.TransformColumns(
+				        Typed,
+				        {
+				            {"started_at", each fnAsUtc(_), type datetime}
+				        }
+				    )
+				in
+				    Parsed
+

@@ -1,0 +1,15 @@
+/// Push, schedule, manual or pr. Built from fact_run so both facts can be sliced by trigger without a second filter path.
+table dim_trigger
+	lineageTag: 01563ac0-b525-4769-a1b9-117c890f28ad
+
+	column Trigger
+		dataType: string
+		isKey
+		lineageTag: 919c8f53-0620-472b-9f2f-df7af941a7f8
+		summarizeBy: none
+		sourceColumn: Trigger
+
+	partition dim_trigger = calculated
+		mode: import
+		source = DISTINCT ( fact_run[Trigger] )
+

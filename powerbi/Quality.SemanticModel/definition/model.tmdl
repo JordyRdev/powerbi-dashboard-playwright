@@ -1,0 +1,28 @@
+/// Star schema of Playwright CI results. Facts sit on shared dimensions. Rates follow the definitions in docs/data-model.md.
+model Model
+	culture: en-GB
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	discourageImplicitMeasures
+	sourceQueryCulture: en-GB
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+annotation __PBI_TimeIntelligenceEnabled = 0
+
+annotation PBI_QueryOrder = ["Metrics","fact_test_result","fact_run","dim_date","dim_test","dim_project","dim_release","dim_commit","dim_environment","dim_failure_category","dim_trigger"]
+
+ref table dim_date
+ref table dim_test
+ref table dim_project
+ref table dim_environment
+ref table dim_release
+ref table dim_commit
+ref table dim_failure_category
+ref table fact_run
+ref table fact_test_result
+ref table dim_trigger
+ref table Metrics
+
+ref cultureInfo en-GB
+

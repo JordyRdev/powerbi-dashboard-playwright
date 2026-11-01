@@ -1,0 +1,124 @@
+/// One test. Title and tags come from the latest run that saw it.
+table dim_test
+	lineageTag: d27e388f-9888-4f8b-893f-d4b3915661f3
+
+	/// Hash of the file and the title path.
+	column test_key
+		dataType: string
+		isHidden
+		isKey
+		displayFolder: Keys
+		lineageTag: 698a60ee-f6f0-478c-9ea3-2f3c657a1fc1
+		summarizeBy: none
+		sourceColumn: test_key
+
+	column Title
+		dataType: string
+		displayFolder: Identity
+		lineageTag: 45671b05-d60f-4889-be1d-2694d57930ae
+		summarizeBy: none
+		sourceColumn: title
+
+	/// Suite and title, which is how a test is named on the report.
+	column 'Title path'
+		dataType: string
+		displayFolder: Identity
+		lineageTag: eab264b1-7a5b-490f-ada3-145f010c4d0f
+		summarizeBy: none
+		sourceColumn: title_path
+
+	column File
+		dataType: string
+		displayFolder: Identity
+		lineageTag: 2088ae6c-e885-4178-9033-71502afa5371
+		summarizeBy: none
+		sourceColumn: file
+
+	column Suite
+		dataType: string
+		displayFolder: Identity
+		lineageTag: 445931d1-f025-4ea8-a39f-c42ba98b3177
+		summarizeBy: none
+		sourceColumn: suite
+
+	/// ui, api, visual or demo, taken from the top folder of the file.
+	column 'Test type'
+		dataType: string
+		displayFolder: Classification
+		lineageTag: 30a01dc4-0ca3-4a61-8c06-e9f5f0e52b82
+		summarizeBy: none
+		sourceColumn: test_type
+
+	column Tags
+		dataType: string
+		displayFolder: Classification
+		lineageTag: f7cf2cbb-2852-4df4-95e7-12b8716ed49f
+		summarizeBy: none
+		sourceColumn: tags
+
+	column 'Smoke test'
+		dataType: boolean
+		displayFolder: Classification
+		lineageTag: 40701eb6-0d10-4915-9920-96a624a52203
+		summarizeBy: none
+		sourceColumn: is_smoke
+
+	/// The labelled demo flaky test. Filter this off to see the rest of the suite.
+	column 'Demo test'
+		dataType: boolean
+		displayFolder: Classification
+		lineageTag: c7eea8d2-cbd4-480a-9dfa-6f104d7e6257
+		summarizeBy: none
+		sourceColumn: is_demo
+
+	column 'First seen'
+		dataType: dateTime
+		formatString: dd/MM/yyyy
+		displayFolder: History
+		lineageTag: b21539bc-a116-43b2-8418-e61e0c2fdb56
+		summarizeBy: none
+		sourceColumn: first_seen
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column 'Last seen'
+		dataType: dateTime
+		formatString: dd/MM/yyyy
+		displayFolder: History
+		lineageTag: 7515ca82-eea3-436f-89e7-3f0c19f8612a
+		summarizeBy: none
+		sourceColumn: last_seen
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	partition dim_test = m
+		mode: import
+		source =
+				let
+				    Source = fnLoadCsv("dim_test.csv"),
+				    Typed = Table.TransformColumnTypes(
+				        Source,
+				        {
+				            {"test_key", type text},
+				            {"title", type text},
+				            {"title_path", type text},
+				            {"file", type text},
+				            {"suite", type text},
+				            {"test_type", type text},
+				            {"tags", type text},
+				            {"is_smoke", type logical},
+				            {"is_demo", type logical},
+				            {"first_seen", type text},
+				            {"last_seen", type text}
+				        }
+				    ),
+				    Parsed = Table.TransformColumns(
+				        Typed,
+				        {
+				            {"first_seen", each fnAsDate(_), type date},
+				            {"last_seen", each fnAsDate(_), type date}
+				        }
+				    )
+				in
+				    Parsed
+

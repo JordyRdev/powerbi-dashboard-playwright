@@ -1,0 +1,61 @@
+/// One tested commit.
+table dim_commit
+	lineageTag: 06be9e0e-f40a-45eb-a8d7-e46c2a4066ef
+
+	/// Full commit SHA.
+	column commit_key
+		dataType: string
+		isHidden
+		isKey
+		displayFolder: Keys
+		lineageTag: d4997872-400a-4220-b231-91edc3b505f8
+		summarizeBy: none
+		sourceColumn: commit_key
+
+	/// First 7 characters of the SHA.
+	column Commit
+		dataType: string
+		lineageTag: f1a73a8e-57b2-4929-bd49-8d5f7ec2ce51
+		summarizeBy: none
+		sourceColumn: short_sha
+		sortByColumn: 'Committed at'
+
+	column 'Committed at'
+		dataType: dateTime
+		formatString: dd/MM/yyyy HH:mm:ss
+		lineageTag: fed74a19-c362-4fb5-ad15-a78285bdc99b
+		summarizeBy: none
+		sourceColumn: committed_at
+
+	/// Release of this commit in the CSV. The report reaches release through the facts, so this copy stays hidden.
+	column release_key
+		dataType: string
+		isHidden
+		displayFolder: Keys
+		lineageTag: d0c89387-2721-4859-8dac-9a768969873d
+		summarizeBy: none
+		sourceColumn: release_key
+
+	partition dim_commit = m
+		mode: import
+		source =
+				let
+				    Source = fnLoadCsv("dim_commit.csv"),
+				    Typed = Table.TransformColumnTypes(
+				        Source,
+				        {
+				            {"commit_key", type text},
+				            {"short_sha", type text},
+				            {"committed_at", type text},
+				            {"release_key", type text}
+				        }
+				    ),
+				    Parsed = Table.TransformColumns(
+				        Typed,
+				        {
+				            {"committed_at", each fnAsUtc(_), type datetime}
+				        }
+				    )
+				in
+				    Parsed
+

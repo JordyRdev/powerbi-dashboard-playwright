@@ -1,0 +1,59 @@
+/// GitHub reads the public CSV files on the data branch. Local reads a folder of the same CSV files in Power BI Desktop.
+expression 'p Source Mode' = "GitHub" meta [IsParameterQuery=true, List={"GitHub", "Local"}, DefaultValue="GitHub", Type="Text", IsParameterQueryRequired=true]
+	lineageTag: aa2c4db3-1663-48cf-bdbd-cbc8f66c5806
+
+	annotation PBI_ResultType = Text
+
+/// Folder of CSV files used when Source Mode is Local. Ignored while Source Mode is GitHub.
+expression 'p Local Folder' = "C:\quality-data\csv" meta [IsParameterQuery=true, Type="Text", IsParameterQueryRequired=true]
+	lineageTag: a2d5c1dd-68a9-43ae-ab97-86e6ab36cc1f
+
+	annotation PBI_ResultType = Text
+
+/// Parses an ISO date from the CSV. Blank becomes null.
+expression fnAsDate =
+		(value as any) as nullable date =>
+		    if value = null then null else Date.FromText(Text.From(value), [Format = "yyyy-MM-dd", Culture = "en-US"])
+	lineageTag: 32996f7e-1fd0-4c0e-8eee-5ca85f11930a
+
+	annotation PBI_ResultType = Function
+
+/// Parses a UTC timestamp from the CSV. The pipeline writes offsets as +00.
+expression fnAsUtc =
+		(value as any) as nullable datetime =>
+		    if value = null then
+		        null
+		    else
+		        let
+		            trimmed = Text.Trim(Text.From(value)),
+		            noZone = Text.BeforeDelimiter(trimmed, "+"),
+		            iso = Text.Replace(noZone, " ", "T") & "Z"
+		        in
+		            DateTime.From(DateTimeZone.FromText(iso))
+	lineageTag: 6a484f42-1c36-44c5-a14c-9c2836ac8467
+
+	annotation PBI_ResultType = Function
+
+/// Loads one star schema CSV. GitHub is the default. Local reads p Local Folder.
+expression fnLoadCsv =
+		(fileName as text) as table =>
+		let
+		    // Fixed host so the service can bind anonymous web credentials.
+		    // Local is a Desktop option. Publish with Source Mode left on GitHub.
+		    Mode = #"p Source Mode",
+		    GitHubBytes = Web.Contents(
+		        "https://raw.githubusercontent.com/JordyRdev/powerbi-dashboard-playwright/data/model/csv",
+		        [RelativePath = fileName]
+		    ),
+		    Folder = Text.TrimEnd(Text.Trim(#"p Local Folder"), {"/", "\"}),
+		    LocalBytes = File.Contents(Text.Combine({Folder, fileName}, "\")),
+		    Bytes = if Mode = "Local" then LocalBytes else GitHubBytes,
+		    Csv = Csv.Document(Bytes, [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+		    Promoted = Table.PromoteHeaders(Csv, [PromoteAllScalars = true]),
+		    BlankAsNull = Table.ReplaceValue(Promoted, "", null, Replacer.ReplaceValue, Table.ColumnNames(Promoted))
+		in
+		    BlankAsNull
+	lineageTag: e185d701-f48b-444b-b5c9-d3181705caee
+
+	annotation PBI_ResultType = Function
+

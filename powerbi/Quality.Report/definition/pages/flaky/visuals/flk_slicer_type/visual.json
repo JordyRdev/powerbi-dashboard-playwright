@@ -1,0 +1,58 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
+  "name": "flk_slicer_type",
+  "position": {
+    "x": 1020.8,
+    "y": 54,
+    "z": 6000,
+    "height": 52,
+    "width": 243.2,
+    "tabOrder": 6000
+  },
+  "visual": {
+    "visualType": "slicer",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dim_test"
+                    }
+                  },
+                  "Property": "Test type"
+                }
+              },
+              "queryRef": "dim_test.Test type",
+              "nativeQueryRef": "Test type"
+            }
+          ]
+        }
+      }
+    },
+    "drillFilterOtherVisuals": true,
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "syncGroup": {
+      "groupName": "slicer_type",
+      "fieldChanges": true,
+      "filterChanges": true
+    }
+  }
+}

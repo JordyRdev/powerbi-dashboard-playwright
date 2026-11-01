@@ -1,0 +1,211 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
+  "name": "rel_table_releases",
+  "position": {
+    "x": 424,
+    "y": 192,
+    "z": 13000,
+    "height": 200,
+    "width": 840,
+    "tabOrder": 13000
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dim_release"
+                    }
+                  },
+                  "Property": "Release"
+                }
+              },
+              "queryRef": "dim_release.Release",
+              "nativeQueryRef": "Release"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dim_release"
+                    }
+                  },
+                  "Property": "Release date"
+                }
+              },
+              "queryRef": "dim_release.Release date",
+              "nativeQueryRef": "Release date"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Metrics"
+                    }
+                  },
+                  "Property": "Pass rate"
+                }
+              },
+              "queryRef": "Metrics.Pass rate",
+              "nativeQueryRef": "Pass rate"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Metrics"
+                    }
+                  },
+                  "Property": "Fail rate"
+                }
+              },
+              "queryRef": "Metrics.Fail rate",
+              "nativeQueryRef": "Fail rate"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Metrics"
+                    }
+                  },
+                  "Property": "Flaky rate"
+                }
+              },
+              "queryRef": "Metrics.Flaky rate",
+              "nativeQueryRef": "Flaky rate"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Metrics"
+                    }
+                  },
+                  "Property": "Pass rate previous release"
+                }
+              },
+              "queryRef": "Metrics.Pass rate previous release",
+              "nativeQueryRef": "Pass rate previous release"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Metrics"
+                    }
+                  },
+                  "Property": "Pass rate vs previous release"
+                }
+              },
+              "queryRef": "Metrics.Pass rate vs previous release",
+              "nativeQueryRef": "Pass rate vs previous release"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Metrics"
+                    }
+                  },
+                  "Property": "Average duration (s)"
+                }
+              },
+              "queryRef": "Metrics.Average duration (s)",
+              "nativeQueryRef": "Average duration (s)"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Metrics"
+                    }
+                  },
+                  "Property": "Runs"
+                }
+              },
+              "queryRef": "Metrics.Runs",
+              "nativeQueryRef": "Runs"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Metrics"
+                    }
+                  },
+                  "Property": "Failure results"
+                }
+              },
+              "queryRef": "Metrics.Failure results",
+              "nativeQueryRef": "Failure results"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Column": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "dim_release"
+                  }
+                },
+                "Property": "Release"
+              }
+            },
+            "direction": "Ascending"
+          }
+        ],
+        "isDefaultSort": true
+      }
+    },
+    "drillFilterOtherVisuals": true,
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Releases'"
+                }
+              }
+            },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "12D"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

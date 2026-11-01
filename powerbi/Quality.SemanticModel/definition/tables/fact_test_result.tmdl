@@ -1,0 +1,171 @@
+/// One test, on one Playwright project, in one CI run, after retries.
+table fact_test_result
+	lineageTag: 9f8cf615-72bf-4ff8-a00d-cb3b041c4150
+
+	column run_key
+		dataType: int64
+		isHidden
+		formatString: 0
+		displayFolder: Keys
+		lineageTag: 8a7f90b7-665f-4d90-8aaf-b1ae42585371
+		summarizeBy: none
+		sourceColumn: run_key
+
+	column test_key
+		dataType: string
+		isHidden
+		displayFolder: Keys
+		lineageTag: e9fdb6c2-6664-4286-9102-6da937b2ee03
+		summarizeBy: none
+		sourceColumn: test_key
+
+	column project_key
+		dataType: string
+		isHidden
+		displayFolder: Keys
+		lineageTag: 7d825229-19f0-44e7-bdd2-c6961391dc4f
+		summarizeBy: none
+		sourceColumn: project_key
+
+	column environment_key
+		dataType: string
+		isHidden
+		displayFolder: Keys
+		lineageTag: a2a4f61a-05b9-4e26-851b-dbfcba4a9df5
+		summarizeBy: none
+		sourceColumn: environment_key
+
+	column release_key
+		dataType: string
+		isHidden
+		displayFolder: Keys
+		lineageTag: c2a07d4d-3a3a-43e0-a87d-aa6ec173fdf7
+		summarizeBy: none
+		sourceColumn: release_key
+
+	column commit_key
+		dataType: string
+		isHidden
+		displayFolder: Keys
+		lineageTag: d1f395bd-5ad6-4ef0-9638-44b22bb792e3
+		summarizeBy: none
+		sourceColumn: commit_key
+
+	column date_key
+		dataType: int64
+		isHidden
+		formatString: 0
+		displayFolder: Keys
+		lineageTag: df9bf68b-6150-437b-89a0-22be7022fbc4
+		summarizeBy: none
+		sourceColumn: date_key
+
+	column failure_key
+		dataType: string
+		isHidden
+		displayFolder: Keys
+		lineageTag: ba372b42-a44b-4264-a217-08ad53e38c3a
+		summarizeBy: none
+		sourceColumn: failure_key
+
+	/// passed, failed, flaky or skipped.
+	column Status
+		dataType: string
+		displayFolder: Result
+		lineageTag: 82914b93-17d4-4b82-bb7d-6d753c947c3b
+		summarizeBy: none
+		sourceColumn: status
+
+	/// True when Status is flaky. Hidden because Status already says this.
+	column is_flaky
+		dataType: boolean
+		isHidden
+		displayFolder: Result
+		lineageTag: 39b3fd7a-1e61-4153-9c73-f9a3b634dbb6
+		summarizeBy: none
+		sourceColumn: is_flaky
+
+	column Retries
+		dataType: int64
+		formatString: 0
+		displayFolder: Result
+		lineageTag: 9cc9ab3a-5bb1-4dc7-b1d0-34a23a786966
+		summarizeBy: none
+		sourceColumn: retries
+
+	column Attempts
+		dataType: int64
+		formatString: 0
+		displayFolder: Result
+		lineageTag: 8a26b932-4111-48c2-857e-20ff48869c72
+		summarizeBy: none
+		sourceColumn: attempt_count
+
+	/// Final attempt duration, in milliseconds.
+	column 'Duration (ms)'
+		dataType: int64
+		formatString: #,0
+		displayFolder: Timing
+		lineageTag: 47b29a80-c816-4654-9d37-5981f65529f6
+		summarizeBy: none
+		sourceColumn: duration_ms
+
+	/// All attempts, including retries, in milliseconds.
+	column 'Total duration (ms)'
+		dataType: int64
+		formatString: #,0
+		displayFolder: Timing
+		lineageTag: 68d7738e-3f7a-4628-8c3c-3653eebf2cff
+		summarizeBy: none
+		sourceColumn: total_duration_ms
+
+	column 'Started at'
+		dataType: dateTime
+		formatString: dd/MM/yyyy HH:mm:ss
+		displayFolder: Timing
+		lineageTag: 6000174b-4a60-4ae2-b1fc-4a2fb5381d7c
+		summarizeBy: none
+		sourceColumn: started_at
+
+	/// Trigger copied from the run so both facts can share dim_trigger. Hidden.
+	column trigger = LOOKUPVALUE ( fact_run[Trigger], fact_run[run_key], fact_test_result[run_key] )
+		dataType: string
+		isHidden
+		displayFolder: Keys
+		lineageTag: d43efdcf-9512-4198-a723-6dbe3c93898e
+		summarizeBy: none
+
+	partition fact_test_result = m
+		mode: import
+		source =
+				let
+				    Source = fnLoadCsv("fact_test_result.csv"),
+				    Typed = Table.TransformColumnTypes(
+				        Source,
+				        {
+				            {"run_key", Int64.Type},
+				            {"test_key", type text},
+				            {"project_key", type text},
+				            {"environment_key", type text},
+				            {"release_key", type text},
+				            {"commit_key", type text},
+				            {"date_key", Int64.Type},
+				            {"failure_key", type text},
+				            {"status", type text},
+				            {"is_flaky", type logical},
+				            {"retries", Int64.Type},
+				            {"attempt_count", Int64.Type},
+				            {"duration_ms", Int64.Type},
+				            {"total_duration_ms", Int64.Type},
+				            {"started_at", type text}
+				        }
+				    ),
+				    Parsed = Table.TransformColumns(
+				        Typed,
+				        {
+				            {"started_at", each fnAsUtc(_), type datetime}
+				        }
+				    )
+				in
+				    Parsed
+

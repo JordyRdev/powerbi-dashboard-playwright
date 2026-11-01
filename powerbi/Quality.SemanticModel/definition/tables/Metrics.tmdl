@@ -1,0 +1,411 @@
+/// Measures for the report. The single column is hidden.
+table Metrics
+	lineageTag: c3a2c3b2-e08a-4397-84b8-52fdad20486a
+
+	/// Rows in the test result fact. One row is one test on one project in one run.
+	measure 'Test results' = COUNTROWS ( fact_test_result )
+		formatString: #,0
+		displayFolder: Volume
+		lineageTag: 7d507a18-9424-4166-86a1-ced91282815e
+
+	/// Results whose final status is passed.
+	measure Passed =
+			CALCULATE (
+			    COUNTROWS ( fact_test_result ),
+			    KEEPFILTERS ( fact_test_result[Status] = "passed" )
+			)
+		formatString: #,0
+		displayFolder: Volume
+		lineageTag: d243ad96-b95d-464f-ba17-b463f77dce63
+
+	/// Results whose final status is failed.
+	measure Failed =
+			CALCULATE (
+			    COUNTROWS ( fact_test_result ),
+			    KEEPFILTERS ( fact_test_result[Status] = "failed" )
+			)
+		formatString: #,0
+		displayFolder: Volume
+		lineageTag: b84d541f-ae38-414e-bff6-c942d9687600
+
+	/// Results whose final status is flaky. This counts results, not distinct tests.
+	measure Flaky =
+			CALCULATE (
+			    COUNTROWS ( fact_test_result ),
+			    KEEPFILTERS ( fact_test_result[Status] = "flaky" )
+			)
+		formatString: #,0
+		displayFolder: Volume
+		lineageTag: 748ff2b7-d6e7-4e4e-bcca-560e875f349c
+
+	/// Results whose final status is skipped. Rates leave these out.
+	measure Skipped =
+			CALCULATE (
+			    COUNTROWS ( fact_test_result ),
+			    KEEPFILTERS ( fact_test_result[Status] = "skipped" )
+			)
+		formatString: #,0
+		displayFolder: Volume
+		lineageTag: 4ba30194-8822-493c-aa76-f22148983ccf
+
+	/// Passed, flaky and failed results. Skipped results are left out of the rates.
+	measure Executed =
+			CALCULATE (
+			    COUNTROWS ( fact_test_result ),
+			    KEEPFILTERS ( fact_test_result[Status] IN { "passed", "flaky", "failed" } )
+			)
+		formatString: #,0
+		displayFolder: Volume
+		lineageTag: 92c2ae6a-e16b-457b-a99c-00b9a68a42bd
+
+	/// Distinct tests in the current filter.
+	measure Tests = DISTINCTCOUNT ( fact_test_result[test_key] )
+		formatString: #,0
+		displayFolder: Volume
+		lineageTag: a427f33b-6252-4a9c-a004-22b6224e77a3
+
+	/// Distinct runs that produced the results in the current filter. A test or project slicer changes this.
+	measure Runs = DISTINCTCOUNT ( fact_test_result[run_key] )
+		formatString: #,0
+		displayFolder: Volume
+		lineageTag: fdc26678-3c94-412a-8658-5e089df36baa
+
+	/// Runs in the current date, release, commit, environment and trigger filter. A test or project slicer does not change this.
+	measure 'CI runs' = COUNTROWS ( fact_run )
+		formatString: #,0
+		displayFolder: Volume
+		lineageTag: 01a7138e-4118-49cd-bc48-813be1ab4f43
+
+	/// Passed plus flaky, divided by executed results. A flaky result counts as passed because the final attempt passed. Skipped results are left out.
+	measure 'Pass rate' = DIVIDE ( [Passed] + [Flaky], [Executed] )
+		formatString: 0.00%
+		displayFolder: Rates
+		lineageTag: 717deb29-768e-414c-b09a-bba692efd526
+
+	/// Failed results divided by executed results. Skipped results are left out.
+	measure 'Fail rate' = DIVIDE ( [Failed], [Executed] )
+		formatString: 0.00%
+		displayFolder: Rates
+		lineageTag: 08f9bfc8-4299-4950-a4fa-71f38006bdb7
+
+	/// Flaky results divided by executed results. Skipped results are left out.
+	measure 'Flaky rate' = DIVIDE ( [Flaky], [Executed] )
+		formatString: 0.00%
+		displayFolder: Rates
+		lineageTag: a5d53585-5ca5-4685-bac7-4322e8d668f0
+
+	/// Pass rate with the labelled demo flaky test removed.
+	measure 'Pass rate (excluding demo)' = CALCULATE ( [Pass rate], KEEPFILTERS ( dim_test[Demo test] = FALSE ) )
+		formatString: 0.00%
+		displayFolder: Rates
+		lineageTag: acde88c8-70bf-4bd3-b55d-bbaf1f05fc1e
+
+	/// Flaky rate with the labelled demo flaky test removed.
+	measure 'Flaky rate (excluding demo)' = CALCULATE ( [Flaky rate], KEEPFILTERS ( dim_test[Demo test] = FALSE ) )
+		formatString: 0.00%
+		displayFolder: Rates
+		lineageTag: d8bc4e35-930c-4bed-9769-8baa2fb7fcdc
+
+	/// Pass rate for tests tagged smoke.
+	measure 'Smoke pass rate' = CALCULATE ( [Pass rate], KEEPFILTERS ( dim_test[Smoke test] = TRUE ) )
+		formatString: 0.00%
+		displayFolder: Rates
+		lineageTag: a16d0ad4-3bed-4db2-9fc9-801fd9279f97
+
+	/// Share of executed results that used at least one retry.
+	measure 'Retry rate' =
+			DIVIDE (
+			    CALCULATE (
+			        COUNTROWS ( fact_test_result ),
+			        KEEPFILTERS ( fact_test_result[Retries] > 0 )
+			    ),
+			    [Executed]
+			)
+		formatString: 0.00%
+		displayFolder: Rates
+		lineageTag: 9a1f2b65-b108-4f1d-9d23-6e063ead45c6
+
+	/// How many distinct tests were flaky at least once in the current filter.
+	measure 'Flaky test count' =
+			CALCULATE (
+			    DISTINCTCOUNT ( fact_test_result[test_key] ),
+			    KEEPFILTERS ( fact_test_result[Status] = "flaky" )
+			)
+		formatString: #,0
+		displayFolder: Flaky
+		lineageTag: bcf967e9-85df-4a1f-9107-cd83c98e17a3
+
+	/// Flaky test count with the labelled demo flaky test removed.
+	measure 'Flaky test count (excluding demo)' = CALCULATE ( [Flaky test count], KEEPFILTERS ( dim_test[Demo test] = FALSE ) )
+		formatString: #,0
+		displayFolder: Flaky
+		lineageTag: ef069c91-838d-4938-8368-1ff15ea790b6
+
+	/// Flaky results of the labelled demo test.
+	measure 'Demo flaky results' = CALCULATE ( [Flaky], KEEPFILTERS ( dim_test[Demo test] = TRUE ) )
+		formatString: #,0
+		displayFolder: Flaky
+		lineageTag: ef2802dd-899e-45b2-bbd9-d67a7b4a1cc4
+
+	/// Mean final attempt duration in seconds. Skipped results are left out. Retries are not included.
+	measure 'Average duration (s)' =
+			DIVIDE (
+			    CALCULATE (
+			        AVERAGE ( fact_test_result[Duration (ms)] ),
+			        KEEPFILTERS ( fact_test_result[Status] <> "skipped" )
+			    ),
+			    1000
+			)
+		formatString: 0.000
+		displayFolder: Duration
+		lineageTag: c54f2856-e81e-42f6-9231-e8065f64e694
+
+	/// 90th percentile of the final attempt duration in seconds. Uses the inclusive percentile, the same method as PERCENTILE.INC. Skipped results are left out.
+	measure 'P90 duration (s)' =
+			DIVIDE (
+			    PERCENTILEX.INC (
+			        FILTER ( fact_test_result, fact_test_result[Status] <> "skipped" ),
+			        fact_test_result[Duration (ms)],
+			        0.9
+			    ),
+			    1000
+			)
+		formatString: 0.000
+		displayFolder: Duration
+		lineageTag: bdb3e844-f233-4bee-9750-46dbdc2ff1ba
+
+	/// Median final attempt duration in seconds. Skipped results are left out.
+	measure 'Median duration (s)' =
+			DIVIDE (
+			    MEDIANX (
+			        FILTER ( fact_test_result, fact_test_result[Status] <> "skipped" ),
+			        fact_test_result[Duration (ms)]
+			    ),
+			    1000
+			)
+		formatString: 0.000
+		displayFolder: Duration
+		lineageTag: a9e4014e-cd91-4eeb-a790-64b7cc366975
+
+	/// Sum of duration in seconds, including retries. Skipped results are left out.
+	measure 'Total duration (s)' =
+			DIVIDE (
+			    CALCULATE (
+			        SUM ( fact_test_result[Total duration (ms)] ),
+			        KEEPFILTERS ( fact_test_result[Status] <> "skipped" )
+			    ),
+			    1000
+			)
+		formatString: 0.000
+		displayFolder: Duration
+		lineageTag: 224f4e91-7630-491f-ac9e-df6330e7891b
+
+	/// Average duration for the same number of calendar days immediately before the first selected date.
+	measure 'Average duration previous period (s)' =
+			VAR MinDate = MIN ( dim_date[Date] )
+			VAR MaxDate = MAX ( dim_date[Date] )
+			VAR DayCount = DATEDIFF ( MinDate, MaxDate, DAY ) + 1
+			VAR PrevEnd = MinDate - 1
+			VAR PrevStart = PrevEnd - DayCount + 1
+			RETURN
+			    IF (
+			        ISBLANK ( MinDate ),
+			        BLANK (),
+			        CALCULATE (
+			            [Average duration (s)],
+			            REMOVEFILTERS ( dim_date ),
+			            DATESBETWEEN ( dim_date[Date], PrevStart, PrevEnd )
+			        )
+			    )
+		formatString: 0.000
+		displayFolder: Duration
+		lineageTag: 81566c60-35e9-45ef-b0a0-763403e7181a
+
+	/// Average duration minus the previous period, in seconds. Blank when the previous period has no days in the date table.
+	measure 'Duration change (s)' =
+			VAR Current = [Average duration (s)]
+			VAR Previous = [Average duration previous period (s)]
+			RETURN
+			    IF ( ISBLANK ( Previous ), BLANK (), Current - Previous )
+		formatString: +0.000;-0.000;0.000
+		displayFolder: Duration
+		lineageTag: 10348b5e-b102-4a1a-ad06-628c1e0fdcf3
+
+	/// Relative change in average duration against the previous period.
+	measure 'Duration change' = DIVIDE ( [Duration change (s)], [Average duration previous period (s)] )
+		formatString: +0.00%;-0.00%;0.00%
+		displayFolder: Duration
+		lineageTag: b5db5cc2-2627-414d-95f3-889f0c136ab7
+
+	/// Pass rate for the same number of calendar days immediately before the first selected date.
+	measure 'Pass rate previous period' =
+			VAR MinDate = MIN ( dim_date[Date] )
+			VAR MaxDate = MAX ( dim_date[Date] )
+			VAR DayCount = DATEDIFF ( MinDate, MaxDate, DAY ) + 1
+			VAR PrevEnd = MinDate - 1
+			VAR PrevStart = PrevEnd - DayCount + 1
+			RETURN
+			    IF (
+			        ISBLANK ( MinDate ),
+			        BLANK (),
+			        CALCULATE (
+			            [Pass rate],
+			            REMOVEFILTERS ( dim_date ),
+			            DATESBETWEEN ( dim_date[Date], PrevStart, PrevEnd )
+			        )
+			    )
+		formatString: 0.00%
+		displayFolder: Period
+		lineageTag: 95e1fc47-e644-4513-8972-9f8ac5ebb7e0
+
+	/// Pass rate minus the previous period, in percentage points. Blank when the previous period is empty.
+	measure 'Pass rate vs previous period' =
+			VAR Current = [Pass rate]
+			VAR Previous = [Pass rate previous period]
+			RETURN
+			    IF ( ISBLANK ( Previous ), BLANK (), Current - Previous )
+		formatString: +0.00%;-0.00%;0.00%
+		displayFolder: Period
+		lineageTag: 05529f27-3cc5-4316-913d-5afd41e406dc
+
+	/// Pass rate for the release with the previous release order. Blank for the first release, which includes untagged when it is order 0.
+	measure 'Pass rate previous release' =
+			VAR CurrentOrder = SELECTEDVALUE ( dim_release[release_order] )
+			RETURN
+			    IF (
+			        ISBLANK ( CurrentOrder ),
+			        BLANK (),
+			        CALCULATE (
+			            [Pass rate],
+			            REMOVEFILTERS ( dim_release ),
+			            dim_release[release_order] = CurrentOrder - 1
+			        )
+			    )
+		formatString: 0.00%
+		displayFolder: Release
+		lineageTag: 18b6f9ff-60d2-4ff5-8b04-fca53c9a2307
+
+	/// Pass rate minus the previous release, in percentage points. Blank when more than one release is in context, or when there is no earlier release.
+	measure 'Pass rate vs previous release' =
+			VAR Current = [Pass rate]
+			VAR Previous = [Pass rate previous release]
+			RETURN
+			    IF ( ISBLANK ( Previous ), BLANK (), Current - Previous )
+		formatString: +0.00%;-0.00%;0.00%
+		displayFolder: Release
+		lineageTag: 12a644f0-0a2e-434f-b57e-98b9cc7b5f3b
+
+	/// Average duration for the previous release.
+	measure 'Average duration previous release (s)' =
+			VAR CurrentOrder = SELECTEDVALUE ( dim_release[release_order] )
+			RETURN
+			    IF (
+			        ISBLANK ( CurrentOrder ),
+			        BLANK (),
+			        CALCULATE (
+			            [Average duration (s)],
+			            REMOVEFILTERS ( dim_release ),
+			            dim_release[release_order] = CurrentOrder - 1
+			        )
+			    )
+		formatString: 0.000
+		displayFolder: Release
+		lineageTag: 004adb84-f7cb-471b-9302-8b162ba691c7
+
+	/// Relative change in average duration against the previous release.
+	measure 'Duration change vs previous release' =
+			DIVIDE (
+			    [Average duration (s)] - [Average duration previous release (s)],
+			    [Average duration previous release (s)]
+			)
+		formatString: +0.00%;-0.00%;0.00%
+		displayFolder: Release
+		lineageTag: 5688732d-0a6d-40fb-a53c-3fc3ac8d1cab
+
+	/// Pass rate for the commit immediately before this one, ordered by commit time. Blank when more than one commit is in context, or for the earliest commit.
+	measure 'Pass rate previous commit' =
+			VAR CurrentAt = SELECTEDVALUE ( dim_commit[Committed at] )
+			VAR PrevAt =
+			    CALCULATE (
+			        MAX ( dim_commit[Committed at] ),
+			        REMOVEFILTERS ( dim_commit ),
+			        dim_commit[Committed at] < CurrentAt
+			    )
+			RETURN
+			    IF (
+			        ISBLANK ( CurrentAt ) || ISBLANK ( PrevAt ),
+			        BLANK (),
+			        CALCULATE (
+			            [Pass rate],
+			            REMOVEFILTERS ( dim_commit ),
+			            dim_commit[Committed at] = PrevAt
+			        )
+			    )
+		formatString: 0.00%
+		displayFolder: Release
+		lineageTag: 6341387a-55c2-4d42-9e6e-219f9ebc03e2
+
+	/// Pass rate minus the previous commit, in percentage points.
+	measure 'Pass rate vs previous commit' =
+			VAR Current = [Pass rate]
+			VAR Previous = [Pass rate previous commit]
+			RETURN
+			    IF ( ISBLANK ( Previous ), BLANK (), Current - Previous )
+		formatString: +0.00%;-0.00%;0.00%
+		displayFolder: Release
+		lineageTag: 060fe628-4e6f-4c23-818b-a438d2c3848a
+
+	/// Failed and flaky results. Both carry a failure category. Passing results are left out.
+	measure 'Failure results' =
+			CALCULATE (
+			    COUNTROWS ( fact_test_result ),
+			    KEEPFILTERS ( fact_test_result[Status] IN { "failed", "flaky" } )
+			)
+		formatString: #,0
+		displayFolder: Failures
+		lineageTag: d5c98a73-40f8-4dd7-aaf6-afa5928a733f
+
+	/// Failure results in the current category divided by all failure results, ignoring the category filter.
+	measure 'Share of failures' =
+			DIVIDE (
+			    [Failure results],
+			    CALCULATE ( [Failure results], REMOVEFILTERS ( dim_failure_category ) )
+			)
+		formatString: 0.00%
+		displayFolder: Failures
+		lineageTag: de9ae445-dea9-44a3-90ab-b04f5c2f4b35
+
+	/// Mean run wall clock in seconds. Follows date, release, commit, environment and trigger. A test or project slicer does not change this.
+	measure 'Average wall clock (s)' = DIVIDE ( AVERAGE ( fact_run[Wall clock (ms)] ), 1000 )
+		formatString: 0.000
+		displayFolder: Runs
+		lineageTag: 1d66b82e-5967-488f-8b9e-d8f635383e13
+
+	/// Runs whose workflow result is failure.
+	measure 'Workflow failures' = CALCULATE ( COUNTROWS ( fact_run ), KEEPFILTERS ( fact_run[Workflow result] = "failure" ) )
+		formatString: #,0
+		displayFolder: Runs
+		lineageTag: 76d1c623-6580-47cf-a826-beb008ddc624
+
+	/// Pass rate of the most recent run in the current filter, by start time.
+	measure 'Latest run pass rate' =
+			VAR LatestAt = MAX ( fact_run[Started at] )
+			VAR LatestKey =
+			    CALCULATE ( MAX ( fact_run[run_key] ), fact_run[Started at] = LatestAt )
+			RETURN
+			    CALCULATE ( [Pass rate], TREATAS ( { LatestKey }, fact_test_result[run_key] ) )
+		formatString: 0.00%
+		displayFolder: Runs
+		lineageTag: 9f4e1617-fc3f-4d13-9f47-dc07a974e1d3
+
+	column Metrics
+		dataType: string
+		isHidden
+		lineageTag: 04c892ad-720f-4910-a525-1fa3f8605b3d
+		summarizeBy: none
+		sourceColumn: Metrics
+
+	partition Metrics = calculated
+		mode: import
+		source = ROW ( "Metrics", "Metrics" )
+

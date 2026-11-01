@@ -1,0 +1,48 @@
+/// One combination of container image and Playwright version.
+table dim_environment
+	lineageTag: 732b92b2-5ef4-4e33-95bb-edff6fa4b139
+
+	column environment_key
+		dataType: string
+		isHidden
+		isKey
+		displayFolder: Keys
+		lineageTag: d35fdba9-c666-48bd-b66c-2c4cb74624d2
+		summarizeBy: none
+		sourceColumn: environment_key
+
+	column 'Container image'
+		dataType: string
+		lineageTag: 34d052fa-9523-4349-be73-82327e4c3d15
+		summarizeBy: none
+		sourceColumn: container_image
+
+	column 'Playwright version'
+		dataType: string
+		lineageTag: 1e78c799-a607-4b33-ade0-33b2d1d9e597
+		summarizeBy: none
+		sourceColumn: playwright_version
+
+	column OS
+		dataType: string
+		lineageTag: 23a0ce7c-e4f3-4f57-b9d9-227660d3f04d
+		summarizeBy: none
+		sourceColumn: os
+
+	partition dim_environment = m
+		mode: import
+		source =
+				let
+				    Source = fnLoadCsv("dim_environment.csv"),
+				    Typed = Table.TransformColumnTypes(
+				        Source,
+				        {
+				            {"environment_key", type text},
+				            {"container_image", type text},
+				            {"playwright_version", type text},
+				            {"os", type text}
+				        }
+				    )
+				in
+				    Typed
+

@@ -1,0 +1,58 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
+  "name": "flk_slicer_release",
+  "position": {
+    "x": 518.4,
+    "y": 54,
+    "z": 4000,
+    "height": 52,
+    "width": 243.2,
+    "tabOrder": 4000
+  },
+  "visual": {
+    "visualType": "slicer",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dim_release"
+                    }
+                  },
+                  "Property": "Release"
+                }
+              },
+              "queryRef": "dim_release.Release",
+              "nativeQueryRef": "Release"
+            }
+          ]
+        }
+      }
+    },
+    "drillFilterOtherVisuals": true,
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "syncGroup": {
+      "groupName": "slicer_release",
+      "fieldChanges": true,
+      "filterChanges": true
+    }
+  }
+}

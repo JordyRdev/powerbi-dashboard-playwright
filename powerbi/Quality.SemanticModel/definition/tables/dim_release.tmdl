@@ -1,0 +1,71 @@
+/// One Git tag, plus untagged for commits before the first tag.
+table dim_release
+	lineageTag: 18e9af08-da4f-42cc-acf9-db7d4236c59a
+
+	/// Git tag, or untagged.
+	column Release
+		dataType: string
+		isKey
+		lineageTag: 9ee359e2-2d31-4f33-9376-0fc49d0350d6
+		summarizeBy: none
+		sourceColumn: release_key
+		sortByColumn: release_order
+
+	column 'Git tag'
+		dataType: string
+		displayFolder: Git
+		lineageTag: 01003f77-9f6a-4693-bff1-9f1c56195a39
+		summarizeBy: none
+		sourceColumn: git_tag
+
+	column 'Tag SHA'
+		dataType: string
+		displayFolder: Git
+		lineageTag: 1ae730d5-8152-4a4f-aabd-da2ef5f0d6b0
+		summarizeBy: none
+		sourceColumn: tag_sha
+
+	column 'Release date'
+		dataType: dateTime
+		formatString: dd/MM/yyyy
+		displayFolder: Git
+		lineageTag: d98d1601-3760-4b37-adf5-54ddbbd1eb9a
+		summarizeBy: none
+		sourceColumn: release_date
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	/// 0 for untagged, then 1, 2, 3 as tags are created. Sorts Release and finds the previous release.
+	column release_order
+		dataType: int64
+		isHidden
+		formatString: 0
+		displayFolder: Git
+		lineageTag: 931deffa-e5b9-43af-941c-40d273fd9077
+		summarizeBy: none
+		sourceColumn: release_order
+
+	partition dim_release = m
+		mode: import
+		source =
+				let
+				    Source = fnLoadCsv("dim_release.csv"),
+				    Typed = Table.TransformColumnTypes(
+				        Source,
+				        {
+				            {"release_key", type text},
+				            {"git_tag", type text},
+				            {"tag_sha", type text},
+				            {"release_date", type text},
+				            {"release_order", Int64.Type}
+				        }
+				    ),
+				    Parsed = Table.TransformColumns(
+				        Typed,
+				        {
+				            {"release_date", each fnAsDate(_), type date}
+				        }
+				    )
+				in
+				    Parsed
+

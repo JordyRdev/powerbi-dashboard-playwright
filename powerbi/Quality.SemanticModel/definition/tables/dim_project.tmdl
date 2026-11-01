@@ -1,0 +1,48 @@
+/// One Playwright project (api, chromium, firefox, webkit, mobile-chrome, visual, demo).
+table dim_project
+	lineageTag: 336773f7-8093-4ebb-b7ed-d0dd10b3ccf3
+
+	/// Playwright project name.
+	column Project
+		dataType: string
+		isKey
+		lineageTag: 47260dff-d46c-4d41-ac4e-9dc499ea27f8
+		summarizeBy: none
+		sourceColumn: project_key
+
+	column Browser
+		dataType: string
+		lineageTag: 430f998f-64fa-4798-98f6-07b76c5c0f95
+		summarizeBy: none
+		sourceColumn: browser
+
+	column Device
+		dataType: string
+		lineageTag: a85ac2eb-11cc-4bb2-98a6-4a50312d7e52
+		summarizeBy: none
+		sourceColumn: device
+
+	/// ui, api, visual or demo.
+	column Layer
+		dataType: string
+		lineageTag: 84bfb988-dfeb-4d57-95e1-1479a2c58e92
+		summarizeBy: none
+		sourceColumn: layer
+
+	partition dim_project = m
+		mode: import
+		source =
+				let
+				    Source = fnLoadCsv("dim_project.csv"),
+				    Typed = Table.TransformColumnTypes(
+				        Source,
+				        {
+				            {"project_key", type text},
+				            {"browser", type text},
+				            {"device", type text},
+				            {"layer", type text}
+				        }
+				    )
+				in
+				    Typed
+

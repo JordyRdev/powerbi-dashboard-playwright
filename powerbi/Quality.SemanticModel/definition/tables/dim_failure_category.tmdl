@@ -1,0 +1,51 @@
+/// One failure category plus a normalised message. Passing results use category none.
+table dim_failure_category
+	lineageTag: 440661ed-1920-4278-bdb6-3d7f006b91b7
+
+	column failure_key
+		dataType: string
+		isHidden
+		isKey
+		displayFolder: Keys
+		lineageTag: 81faaa6e-b645-4017-bfb2-9fc96398fbb1
+		summarizeBy: none
+		sourceColumn: failure_key
+
+	/// visual diff, network, locator, timeout, assertion, other, or none.
+	column Category
+		dataType: string
+		lineageTag: 22210e22-51d4-4c34-9339-cc819446d913
+		summarizeBy: none
+		sourceColumn: category
+
+	/// Error text with numbers and quoted values replaced, so the same problem groups together.
+	column 'Normalised message'
+		dataType: string
+		lineageTag: 50bd5a28-d90d-40ac-875e-dbdb7cb566e7
+		summarizeBy: none
+		sourceColumn: normalized_message
+
+	column 'Example message'
+		dataType: string
+		displayFolder: Detail
+		lineageTag: 50825644-fae5-490f-a842-2038fb0af132
+		summarizeBy: none
+		sourceColumn: example_message
+
+	partition dim_failure_category = m
+		mode: import
+		source =
+				let
+				    Source = fnLoadCsv("dim_failure_category.csv"),
+				    Typed = Table.TransformColumnTypes(
+				        Source,
+				        {
+				            {"failure_key", type text},
+				            {"category", type text},
+				            {"normalized_message", type text},
+				            {"example_message", type text}
+				        }
+				    )
+				in
+				    Typed
+

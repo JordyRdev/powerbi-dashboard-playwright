@@ -1,0 +1,104 @@
+relationship ff2d719e-36e2-451d-89af-8de83329f503
+	fromColumn: fact_test_result.date_key
+	toColumn: dim_date.date_key
+	crossFilteringBehavior: oneDirection
+	fromCardinality: many
+	toCardinality: one
+	isActive: true
+
+relationship 48f3c9a0-84e7-486f-9924-6e7a6e7883ae
+	fromColumn: fact_test_result.test_key
+	toColumn: dim_test.test_key
+	crossFilteringBehavior: oneDirection
+	fromCardinality: many
+	toCardinality: one
+	isActive: true
+
+relationship ea0d45ca-da3a-45eb-bac3-d01e6deb69a7
+	fromColumn: fact_test_result.project_key
+	toColumn: dim_project.Project
+	crossFilteringBehavior: oneDirection
+	fromCardinality: many
+	toCardinality: one
+	isActive: true
+
+relationship bf93c8bb-215d-41dd-bada-57a2376f0b5a
+	fromColumn: fact_test_result.environment_key
+	toColumn: dim_environment.environment_key
+	crossFilteringBehavior: oneDirection
+	fromCardinality: many
+	toCardinality: one
+	isActive: true
+
+relationship e1f6b607-c48d-4100-b293-7aec5eae569d
+	fromColumn: fact_test_result.release_key
+	toColumn: dim_release.Release
+	crossFilteringBehavior: oneDirection
+	fromCardinality: many
+	toCardinality: one
+	isActive: true
+
+relationship f3cf1de0-cb84-48ca-8441-2c7733854abf
+	fromColumn: fact_test_result.commit_key
+	toColumn: dim_commit.commit_key
+	crossFilteringBehavior: oneDirection
+	fromCardinality: many
+	toCardinality: one
+	isActive: true
+
+relationship a2f60fde-8ce6-42bb-a42c-3fa362049d0c
+	fromColumn: fact_test_result.failure_key
+	toColumn: dim_failure_category.failure_key
+	crossFilteringBehavior: oneDirection
+	fromCardinality: many
+	toCardinality: one
+	isActive: true
+
+relationship 74cb7460-ac53-4b36-bbc0-45d67a3dcd0f
+	fromColumn: fact_test_result.trigger
+	toColumn: dim_trigger.Trigger
+	crossFilteringBehavior: oneDirection
+	fromCardinality: many
+	toCardinality: one
+	isActive: true
+
+relationship c0f2239e-3f26-48e0-b11c-865590a46d1e
+	fromColumn: fact_run.date_key
+	toColumn: dim_date.date_key
+	crossFilteringBehavior: oneDirection
+	fromCardinality: many
+	toCardinality: one
+	isActive: true
+
+relationship 71516c4a-1221-4e69-ac68-63c649a0204f
+	fromColumn: fact_run.release_key
+	toColumn: dim_release.Release
+	crossFilteringBehavior: oneDirection
+	fromCardinality: many
+	toCardinality: one
+	isActive: true
+
+relationship be9466d6-6541-414e-9880-c5654a4f0fb1
+	fromColumn: fact_run.commit_key
+	toColumn: dim_commit.commit_key
+	crossFilteringBehavior: oneDirection
+	fromCardinality: many
+	toCardinality: one
+	isActive: true
+
+relationship eeda86ff-a1b7-4e1a-841a-2c38e6f9d41b
+	fromColumn: fact_run.environment_key
+	toColumn: dim_environment.environment_key
+	crossFilteringBehavior: oneDirection
+	fromCardinality: many
+	toCardinality: one
+	isActive: true
+
+relationship 43495824-b2e7-47fd-91b3-083f9faa75c1
+	fromColumn: fact_run.Trigger
+	toColumn: dim_trigger.Trigger
+	crossFilteringBehavior: oneDirection
+	fromCardinality: many
+	toCardinality: one
+	isActive: true
+
