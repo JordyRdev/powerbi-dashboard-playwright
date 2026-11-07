@@ -1,0 +1,8 @@
+project_key,browser,device,layer
+api,none,none,api
+chromium,chromium,desktop,ui
+demo,none,none,demo
+firefox,firefox,desktop,ui
+mobile-chrome,chromium,mobile,ui
+visual,chromium,desktop,visual
+webkit,webkit,desktop,ui
