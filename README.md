@@ -1,14 +1,14 @@
 # Power BI Dashboard for Playwright
 
-[![CI](https://github.com/JordyRdev/powerbi-dashboard-playwright/actions/workflows/ci.yml/badge.svg)](https://github.com/JordyRdev/powerbi-dashboard-playwright/actions/workflows/ci.yml)
-[![Allure report](https://img.shields.io/badge/report-Allure-orange.svg)](https://JordyRdev.github.io/powerbi-dashboard-playwright/)
+[![CI](https://github.com/JordyRdev/powerbi-playwright-dashboard/actions/workflows/ci.yml/badge.svg)](https://github.com/JordyRdev/powerbi-playwright-dashboard/actions/workflows/ci.yml)
+[![Allure report](https://img.shields.io/badge/report-Allure-orange.svg)](https://JordyRdev.github.io/powerbi-playwright-dashboard/)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
 A Playwright and TypeScript suite runs in GitHub Actions, stores every run in a star schema, and opens as a Power BI report. The report shows which tests are flaky, whether the suite is getting slower, and whether a release is better or worse than the one before it.
 
-Phase 4 of 6 is on `main`. The semantic model and the five report pages live in `powerbi/Quality.pbip`. Every CI run on `main` is added to the [`data` branch](https://github.com/JordyRdev/powerbi-dashboard-playwright/tree/data). Refresh the project in Power BI Desktop to load the current files. Screenshots of the report pages are not in the repository yet. See [Screenshots](#screenshots).
+Phase 4 of 6 is on `main`. The semantic model and the five report pages live in `powerbi/Quality.pbip`. Every CI run on `main` is added to the [`data` branch](https://github.com/JordyRdev/powerbi-playwright-dashboard/tree/data). Refresh the project in Power BI Desktop to load the current files. Screenshots of the report pages are not in the repository yet. See [Screenshots](#screenshots).
 
-The live Allure report: <https://jordyrdev.github.io/powerbi-dashboard-playwright/>
+The live Allure report: <https://jordyrdev.github.io/powerbi-playwright-dashboard/>
 
 <img width="926" height="837" alt="Allure report: pass rate, duration trends and flaky tests across CI runs" src="https://github.com/user-attachments/assets/fe17f7a3-f6f3-4167-9fc4-12ef0fccfbee" />
 
@@ -172,7 +172,7 @@ Details: [docs/data-model.md](docs/data-model.md).
 The default parameter `p Source Mode` is `GitHub`. Refresh reads the public CSV files on the `data` branch through the Web connector, with no sign in and no gateway:
 
 ```text
-https://raw.githubusercontent.com/JordyRdev/powerbi-dashboard-playwright/data/model/csv/<table>.csv
+https://raw.githubusercontent.com/JordyRdev/powerbi-playwright-dashboard/data/model/csv/<table>.csv
 ```
 
 Parquet copies of the same tables sit next to the CSV files. The project loads CSV so column types are set in M.
@@ -244,8 +244,8 @@ The five report pages do not have images in this repository yet. Each block belo
 
 ## Reports and CI
 
-- **Allure report:** <https://JordyRdev.github.io/powerbi-dashboard-playwright/> with trends across runs and failure categories (visual, network, locator, timeout, assertion).
-- **Playwright HTML report:** <https://JordyRdev.github.io/powerbi-dashboard-playwright/playwright/>
+- **Allure report:** <https://JordyRdev.github.io/powerbi-playwright-dashboard/> with trends across runs and failure categories (visual, network, locator, timeout, assertion).
+- **Playwright HTML report:** <https://JordyRdev.github.io/powerbi-playwright-dashboard/playwright/>
 - **Raw results:** every CI run keeps a `raw-results` artifact for 90 days (`playwright-results.json`, `junit.xml`, `run-meta.json`).
 - **Dataset:** the `data` branch holds every run on `main` and the star schema built from it, as Parquet and CSV.
 

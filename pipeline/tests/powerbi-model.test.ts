@@ -160,7 +160,7 @@ describe('Power BI model', () => {
     const expressions = readFileSync(join(modelDir, 'expressions.tmdl'), 'utf8');
     assert.match(
       expressions,
-      /https:\/\/raw\.githubusercontent\.com\/JordyRdev\/powerbi-dashboard-playwright\/data\/model\/csv/,
+      /https:\/\/raw\.githubusercontent\.com\/JordyRdev\/powerbi-playwright-dashboard\/data\/model\/csv/,
     );
     assert.match(expressions, /"GitHub" meta \[IsParameterQuery=true/);
     assert.match(expressions, /p Local Folder/);

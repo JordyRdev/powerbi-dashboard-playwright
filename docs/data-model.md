@@ -1,7 +1,7 @@
 # Data model
 
 Every CI run on `main` adds its results to a star schema. The pipeline lives in
-`pipeline/` and the output is published on the [`data` branch](https://github.com/JordyRdev/powerbi-dashboard-playwright/tree/data).
+`pipeline/` and the output is published on the [`data` branch](https://github.com/JordyRdev/powerbi-playwright-dashboard/tree/data).
 
 ## Flow
 
@@ -194,7 +194,7 @@ and the model is rebuilt from it on every run, so the branch does not grow with 
 version of the Parquet files.
 
 Power BI reads the CSV files over HTTPS (the same tables are also stored as Parquet), for example
-`https://raw.githubusercontent.com/JordyRdev/powerbi-dashboard-playwright/data/model/csv/fact_test_result.csv`.
+`https://raw.githubusercontent.com/JordyRdev/powerbi-playwright-dashboard/data/model/csv/fact_test_result.csv`.
 The project, the measures and the numbers to check are in [power-bi.md](power-bi.md).
 
 ## Running it locally

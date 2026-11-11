@@ -19,5 +19,5 @@ runs and replaces the snapshot.
 Power BI reads the CSV files with the Web connector. Parquet copies of the same tables sit beside them. For example:
 
 ```text
-https://raw.githubusercontent.com/JordyRdev/powerbi-dashboard-playwright/data/model/csv/fact_test_result.csv
+https://raw.githubusercontent.com/JordyRdev/powerbi-playwright-dashboard/data/model/csv/fact_test_result.csv
 ```

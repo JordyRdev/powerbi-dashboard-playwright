@@ -1,5 +1,5 @@
 {
-  "name": "powerbi-dashboard-playwright",
+  "name": "powerbi-playwright-dashboard",
   "version": "0.1.0",
   "private": true,
   "description": "Playwright + TypeScript test suite whose CI results feed a star schema and a Power BI quality dashboard.",
@@ -18,9 +18,9 @@
     "check": "npm run lint && npm run typecheck && npm run test:pipeline",
     "report": "playwright show-report",
     "report:allure": "allure generate allure-results --config allurerc.mjs --clean && allure open allure-report",
-    "docker:build": "docker build -t powerbi-dashboard-playwright .",
-    "docker:test": "docker run --rm --ipc=host -v \"$PWD/playwright-report:/app/playwright-report\" -v \"$PWD/test-results:/app/test-results\" powerbi-dashboard-playwright",
-    "docker:update-snapshots": "docker run --rm --ipc=host -v \"$PWD/tests/visual:/app/tests/visual\" powerbi-dashboard-playwright npx playwright test --project=visual --update-snapshots=all",
+    "docker:build": "docker build -t powerbi-playwright-dashboard .",
+    "docker:test": "docker run --rm --ipc=host -v \"$PWD/playwright-report:/app/playwright-report\" -v \"$PWD/test-results:/app/test-results\" powerbi-playwright-dashboard",
+    "docker:update-snapshots": "docker run --rm --ipc=host -v \"$PWD/tests/visual:/app/tests/visual\" powerbi-playwright-dashboard npx playwright test --project=visual --update-snapshots=all",
     "test:pipeline": "tsx --test pipeline/tests/*.test.ts",
     "data:ingest": "tsx pipeline/ingest.ts",
     "data:build": "tsx pipeline/build.ts"

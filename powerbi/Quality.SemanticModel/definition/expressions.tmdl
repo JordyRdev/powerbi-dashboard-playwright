@@ -42,7 +42,7 @@ expression fnLoadCsv =
 		    // Local is a Desktop option. Publish with Source Mode left on GitHub.
 		    Mode = #"p Source Mode",
 		    GitHubBytes = Web.Contents(
-		        "https://raw.githubusercontent.com/JordyRdev/powerbi-dashboard-playwright/data/model/csv",
+		        "https://raw.githubusercontent.com/JordyRdev/powerbi-playwright-dashboard/data/model/csv",
 		        [RelativePath = fileName]
 		    ),
 		    Folder = Text.TrimEnd(Text.Trim(#"p Local Folder"), {"/", "\"}),

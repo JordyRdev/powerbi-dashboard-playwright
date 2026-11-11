@@ -1,7 +1,7 @@
 # Power BI
 
 `powerbi/Quality.pbip` is the phase 4 report. It loads the star schema from the
-[`data` branch](https://github.com/JordyRdev/powerbi-dashboard-playwright/tree/data)
+[`data` branch](https://github.com/JordyRdev/powerbi-playwright-dashboard/tree/data)
 and answers the questions in the README: which tests are flaky, whether the suite
 is getting slower, and whether a release is better or worse than the one before it.
 
@@ -26,7 +26,7 @@ Power Query loads nine CSV files. The default is the public raw URL of the `data
 branch, so a refresh needs no gateway and no sign in:
 
 ```text
-https://raw.githubusercontent.com/JordyRdev/powerbi-dashboard-playwright/data/model/csv/<table>.csv
+https://raw.githubusercontent.com/JordyRdev/powerbi-playwright-dashboard/data/model/csv/<table>.csv
 ```
 
 The host is a fixed string. The file name is passed as `RelativePath`, which is the
